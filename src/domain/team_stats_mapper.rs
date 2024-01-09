@@ -18,7 +18,7 @@ impl TeamStatsMapper {
     ) -> Vec<TeamStats> {
         str::from_utf8(result_file_as_bytes.as_slice())
             .expect("")
-            .split("\n")
+            .split('\n')
             .filter(|team_stats_raw| !team_stats_raw.is_empty())
             .map(TeamStatsMapper::deserialize_to_team_stats_raw_object)
             .map(|team_stats_raw| {
@@ -32,7 +32,7 @@ impl TeamStatsMapper {
     }
 
     fn deserialize_to_team_stats_raw_object(team_stats_raw_str: &str) -> TeamStatsRaw {
-        let res_deserialization = serde_json::from_str(&team_stats_raw_str);
+        let res_deserialization = serde_json::from_str(team_stats_raw_str);
 
         match res_deserialization {
             Ok(team_stats_raw) => team_stats_raw,
@@ -58,13 +58,13 @@ impl TeamStatsMapper {
             .scorers
             .iter()
             .max_by_key(|scorer| scorer.goals)
-            .expect(format!("Top scorer not found for the team !! {team_name}").as_str());
+            .unwrap_or_else(|| panic!("Top scorer not found for the team !! {team_name}"));
 
         let best_passer_raw: &TeamScorerRaw = team_stats_raw
             .scorers
             .iter()
             .max_by_key(|scorer| scorer.goalAssists)
-            .expect(format!("Best passer not found for the team !! {team_name}").as_str());
+            .unwrap_or_else(|| panic!("Best passer not found for the team !! {team_name}"));
 
         let top_scorer = domain::team_stats_structs::TopScorerStats {
             firstName: top_scorer_raw.scorerFirstName.to_string(),
@@ -84,7 +84,7 @@ impl TeamStatsMapper {
 
         let team_slogan = team_slogans
             .get(team_name.as_str())
-            .expect(format!("Slogan not found for the team {team_name}").as_str());
+            .unwrap_or_else(|| panic!("Slogan not found for the team {team_name}"));
 
         TeamStats {
             teamName: team_name,

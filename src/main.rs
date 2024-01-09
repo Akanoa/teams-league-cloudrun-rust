@@ -33,7 +33,7 @@ lazy_static! {
 }
 
 fn get_env_var(key: &str) -> String {
-    env::var(key).expect(format!("Env var {key} was not set ").as_str())
+    env::var(key).unwrap_or_else(|_| panic!("Env var {key} was not set "))
 }
 
 async fn raw_to_team_stats_domain_and_load_result_bq(req: Request<impl Body>) -> Result<Response<Full<Bytes>>, Infallible> {
