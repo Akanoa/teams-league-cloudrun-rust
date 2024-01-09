@@ -34,8 +34,7 @@ pub struct BestPasserStats {
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct TeamStats
-{
+pub struct TeamStats {
     pub teamName: String,
     pub teamScore: i64,
     pub teamTotalGoals: i64,
@@ -45,5 +44,3 @@ pub struct TeamStats
     #[serde(with = "time::serde::rfc3339::option")]
     pub ingestionDate: Option<OffsetDateTime>,
 }
-
-
