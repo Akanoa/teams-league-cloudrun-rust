@@ -63,37 +63,37 @@ impl TeamStatsMapper {
         let best_passer_raw: &TeamScorerRaw = team_stats_raw
             .scorers
             .iter()
-            .max_by_key(|scorer| scorer.goalAssists)
+            .max_by_key(|scorer| scorer.goal_assists)
             .unwrap_or_else(|| panic!("Best passer not found for the team !! {team_name}"));
 
         let top_scorer = domain::team_stats_structs::TopScorerStats {
-            firstName: top_scorer_raw.scorerFirstName.to_string(),
-            lastName: top_scorer_raw.scorerLastName.to_string(),
+            first_name: top_scorer_raw.scorer_first_name.to_string(),
+            last_name: top_scorer_raw.scorer_last_name.to_string(),
             goals: top_scorer_raw.goals,
             games: top_scorer_raw.games,
         };
 
         let best_passer = domain::team_stats_structs::BestPasserStats {
-            firstName: best_passer_raw.scorerFirstName.to_string(),
-            lastName: best_passer_raw.scorerLastName.to_string(),
-            goalAssists: best_passer_raw.goalAssists,
+            first_name: best_passer_raw.scorer_first_name.to_string(),
+            last_name: best_passer_raw.scorer_last_name.to_string(),
+            goal_assists: best_passer_raw.goal_assists,
             games: best_passer_raw.games,
         };
 
-        let team_name = team_stats_raw.teamName;
+        let team_name = team_stats_raw.team_name;
 
         let team_slogan = team_slogans
             .get(team_name.as_str())
             .unwrap_or_else(|| panic!("Slogan not found for the team {team_name}"));
 
         TeamStats {
-            teamName: team_name,
-            teamScore: team_stats_raw.teamScore,
-            teamTotalGoals: team_total_goals,
-            teamSlogan: team_slogan.to_string(),
-            topScorerStats: top_scorer,
-            bestPasserStats: best_passer,
-            ingestionDate: ingestion_date,
+            team_name: team_name,
+            team_score: team_stats_raw.team_score,
+            team_total_goals: team_total_goals,
+            team_slogan: team_slogan.to_string(),
+            top_scorer_stats: top_scorer,
+            best_passer_stats: best_passer,
+            ingestion_date: ingestion_date,
         }
     }
 }
