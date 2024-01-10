@@ -1,3 +1,4 @@
+use google_cloud_bigquery::http::tabledata::insert_all::Row;
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
@@ -48,4 +49,13 @@ pub struct TeamStats {
     pub best_passer_stats: BestPasserStats,
     #[serde(with = "time::serde::rfc3339::option")]
     pub ingestion_date: Option<OffsetDateTime>,
+}
+
+impl From<TeamStats> for Row<TeamStats> {
+    fn from(team_stats: TeamStats) -> Self {
+        Row {
+            insert_id: None,
+            json: team_stats,
+        }
+    }
 }

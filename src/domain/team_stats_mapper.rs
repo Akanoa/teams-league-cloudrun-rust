@@ -87,13 +87,13 @@ impl TeamStatsMapper {
             .unwrap_or_else(|| panic!("Slogan not found for the team {team_name}"));
 
         TeamStats {
-            team_name: team_name,
+            team_name,
             team_score: team_stats_raw.team_score,
-            team_total_goals: team_total_goals,
+            team_total_goals,
             team_slogan: team_slogan.to_string(),
             top_scorer_stats: top_scorer,
             best_passer_stats: best_passer,
-            ingestion_date: ingestion_date,
+            ingestion_date,
         }
     }
 }

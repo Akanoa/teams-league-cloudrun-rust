@@ -9,17 +9,8 @@ impl TeamStatsBQRowMapper {
         team_stats_domain_list: Vec<TeamStats>,
     ) -> Vec<Row<TeamStats>> {
         team_stats_domain_list
-            .iter()
-            .map(|team_stats| {
-                TeamStatsBQRowMapper::map_to_team_stats_bigquery_row(TeamStats::clone(team_stats))
-            })
+            .into_iter()
+            .map(Row::from)
             .collect::<Vec<Row<TeamStats>>>()
-    }
-
-    fn map_to_team_stats_bigquery_row(team_stats: TeamStats) -> Row<TeamStats> {
-        Row {
-            insert_id: None,
-            json: team_stats,
-        }
     }
 }
