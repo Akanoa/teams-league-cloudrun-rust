@@ -20,8 +20,8 @@ use hyper_util::rt::TokioIo;
 use time::OffsetDateTime;
 use tokio::net::TcpListener;
 
-use domain::team_stats_mapper::TeamStatsMapper;
-use team_stats_bq_row_mapper::TeamStatsBQRowMapper;
+use crate::domain::team_stats_mapper::map_to_team_stats_domains;
+use crate::team_stats_bq_row_mapper::map_to_team_stats_bigquery_rows;
 use teams_league_cloudrun_rust::{
     config::Config, download_file, get_big_query_client, get_gcs_client,
 };
@@ -62,12 +62,10 @@ async fn raw_to_team_stats_domain_and_load_result_bq(
     let file_bytes = download_file(&gcs_client, &config.input).await?;
 
     // Insert data
-
     let team_stats_domain_list =
-        TeamStatsMapper::map_to_team_stats_domains(*INGESTION_DATE, team_slogans, file_bytes);
+        map_to_team_stats_domains(*INGESTION_DATE, &team_slogans, file_bytes)?;
 
-    let team_stats_table_bq_rows =
-        TeamStatsBQRowMapper::map_to_team_stats_bigquery_rows(team_stats_domain_list);
+    let team_stats_table_bq_rows = map_to_team_stats_bigquery_rows(team_stats_domain_list);
 
     let request = InsertAllRequest {
         rows: team_stats_table_bq_rows,
